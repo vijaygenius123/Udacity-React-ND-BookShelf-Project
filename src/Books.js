@@ -6,12 +6,8 @@ class Books extends Component {
     
 
     render() {
-        console.log(this.props.books)
-        console.log(this.props.category)
         const books = this.props.books
-        let caterogy = this.props.category 
-        if(caterogy === undefined )
-            caterogy = "none"
+        const caterogy = this.props.category 
         const booksToShow = books.filter((books) => books.shelf === caterogy)
         const onBookUpdate = this.props.onBookUpdate
 

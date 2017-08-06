@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Books from './Books'
-import BookShelf from './BookShelf'
 
 class BookSearch extends Component {
 
@@ -45,8 +44,7 @@ class BookSearch extends Component {
   }
     
     render() {
-
-        const onBookUpdate = this.props.onBookUpdate
+        
         const { query, searchResults } = this.state
         return (
             <div className="search-books">
