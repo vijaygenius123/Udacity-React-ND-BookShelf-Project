@@ -1,74 +1,81 @@
-import React from 'react'
-import * as BooksAPI from './BooksAPI'
-import './App.css'
-import BookShelf from './BookShelf'
-import BookSearch from './BookSearch'
-import { Route } from 'react-router-dom'
-
+import React from 'react';
+import { Route } from 'react-router-dom';
+import ListBooks from './ListBooks';
+import SearchBooks from './SearchBooks';
+import * as BooksAPI from './BooksAPI';
+import './App.css';
 
 class BooksApp extends React.Component {
   state = {
     books: [],
-    shelves: [
-      { name: "currentlyReading", title: "Currently Reading" },
-      { name: "wantToRead", title: "Want To Read" },
-      { name: "read", title: "Read" }
-    ]
+    modalContent: {
+      heading: '',
+      body: '',
+      visible: false
+    }
   }
 
   componentDidMount() {
-    BooksAPI.getAll().then((books) => {
-      this.setState({ books })
-    })
+    this.refreshBooks();
   }
 
-  onChangeBookShelf = (book, event) => {
-    const new_shelf = event.target.value
-    this.setState(function (state) {
+  changeBookShelf = (book, targetShelf) => {
+    BooksAPI.update(book, targetShelf).then((result)=>{
+      //console.log(result);
+      this.refreshBooks();
+    });
+  }
 
-      if (state.books.findIndex(x => x.id === book.id)) {
-        state.books[state.books.findIndex(x => x.id === book.id)].shelf = new_shelf;
-      } else {
-        book.shelf = new_shelf;
-        state.books.push(book);
-      }
-
-      return {
-        books: state.books
+  showModalContent = (heading, body) => {
+    this.setState({
+      modalContent: {
+        heading: heading,
+        body: body,
+        visible: true
       }
     });
+  }
 
-    BooksAPI.update(book, new_shelf).then((ret) => {
+  closeModalContent = () => {
+    this.setState({
+      modalContent: {
+        heading: '',
+        body: '',
+        visible: false
+      }
+    });
+  }
 
+  refreshBooks = () => {
+    BooksAPI.getAll().then((books) => {
+      this.setState({loading:false});
+      //console.log(books)
+      this.setState({ books });
     });
   }
 
   render() {
+
+    const { modalContent } = this.state;
+
     return (
-      /**
-       * Books -> Returns the Book component
-       * BookShelf -> Displays the books in thier corresponding shelf ( Read, Want To Read & Currently Reading) 
-       * BookSearch -> Allows to search the book from the API and add to BookShelf
-       * 
-       */
       <div className="app">
-        <Route exact path='/search' render={() => (
-          <BookSearch
-            onBookUpdate={this.onChangeBookShelf}
-          />
-        )
-        } />
-
-        <Route exact path='/' render={() => (
-          <BookShelf
-            books={this.state.books}
-            shelves={this.state.shelves}
-            onBookUpdate={this.onChangeBookShelf}
-          />
+        <Route exact path="/" render={() => (
+          <ListBooks books={this.state.books} onChangeBookShelf={this.changeBookShelf} showModalContent={this.showModalContent} />
+        )}
+        />
+        <Route path="/search" render={({ history }) => (
+          <SearchBooks onChangeBookShelf={this.changeBookShelf} books={this.state.books} showModalContent={this.showModalContent} />
         )} />
+        {modalContent.visible && (
+        <div className="modal" onClick={ this.closeModalContent }>
+            <div className="modal-content">
+                <h3>{modalContent.heading}</h3>
+                <p>{modalContent.body}</p>
+            </div>
+        </div>)}
       </div>
-
-    )
+    );
   }
 }
 

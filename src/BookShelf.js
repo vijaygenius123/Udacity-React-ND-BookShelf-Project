@@ -1,38 +1,28 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import Books from './Books'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import BooksGrid from './BooksGrid';
+
 class BookShelf extends Component {
 
-
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        title: PropTypes.string.isRequired,
+        onChangeBookShelf: PropTypes.func.isRequired
+    }
 
     render() {
 
-        const books = this.props.books
-        const shelves = this.props.shelves
-        const onBookUpdate = this.props.onBookUpdate
+        const { books, title, onChangeBookShelf } = this.props;
+
         return (
-            <div className="list-books">
-                <div className="list-books-title">
-                    <h1>MyReads</h1>
-                </div>
-                <div className="list-books-content">
-                    <div>
-                        {shelves.map((shelf,index) => (
-                            <div className="bookshelf" key={index}>
-                                <h2 className="bookshelf-title">{shelf.title}</h2>
-                                <Books books={books} category={shelf.name} onBookUpdate={onBookUpdate}/>
-                            </div>
-                        )
-                        )}
-                    </div>
-                </div>
-                <div className="open-search">
-                    <Link to='/search'> Add a book </Link>
+            <div className="bookshelf">
+                <h2 className="bookshelf-title">{title}</h2>
+                <div className="bookshelf-books">
+                    <BooksGrid books={books} onChangeBookShelf={ onChangeBookShelf } showModalContent={this.props.showModalContent} />
                 </div>
             </div>
-        )
+        );
     }
-
 }
 
-export default BookShelf
+export default BookShelf;

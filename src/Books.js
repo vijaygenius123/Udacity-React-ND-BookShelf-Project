@@ -3,11 +3,10 @@ import React, { Component } from 'react'
 
 class Books extends Component {
 
-    
-
     render() {
         const books = this.props.books
-        const caterogy = this.props.category 
+        const caterogy = this.props.category
+        console.log(books)
         const booksToShow = books.filter((books) => books.shelf === caterogy)
         const onBookUpdate = this.props.onBookUpdate
 
@@ -38,6 +37,5 @@ class Books extends Component {
         )
     }
 }
-
 
 export default Books

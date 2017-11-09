@@ -14,7 +14,7 @@ class BookSearch extends Component {
         this.setState({
             query: query.trim()
         });
-        if (this.state.query) {
+        if (this.state.query !== '') {
             BooksAPI.search(this.state.query, 10).then((searchResults) => {
                 searchResults = searchResults.length > 0 ? searchResults : [];
                 this.setState({ searchResults });
@@ -42,9 +42,9 @@ class BookSearch extends Component {
 
     });
   }
-    
+
     render() {
-        
+
         const { query, searchResults } = this.state
         return (
             <div className="search-books">
@@ -52,7 +52,6 @@ class BookSearch extends Component {
                     <Link className="close-search" to='/'>Close</Link>
                     <div className="search-books-input-wrapper">
                         <input type="text" placeholder="Search by title or author" value={query} onChange={(event) => this.searchBooks(event.target.value)} />
-
                     </div>
                 </div>
                 <div className="search-books-results">
