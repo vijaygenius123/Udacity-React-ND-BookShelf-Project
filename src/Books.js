@@ -16,7 +16,11 @@ class Books extends Component {
                         <li key={book.id}>
                             <div className="book">
                                 <div className="book-top">
+                                   {    book.imageLinks ? 0
                                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                                    :
+                                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(http://via.placeholder.com/128x193?text=No%20Cover)` }}></div>
+                                }
                                     <div className="book-shelf-changer">
                                         <select onChange={(e) => onBookUpdate(book, e)} defaultValue={caterogy}>
                                             <option value="none" disabled>Move to...</option>

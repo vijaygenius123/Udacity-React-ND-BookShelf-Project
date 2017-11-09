@@ -16,7 +16,11 @@ class Book extends Component {
         return (
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }} onClick={ () => showModalContent(book.title, book.description) }></div>
+                { book.imageLinks ?
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }} onClick={ () => showModalContent(book.title, book.description) }></div> :
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("http://via.placeholder.com/128x193?text=No%20Cover")` }} onClick={ () => showModalContent(book.title, book.description) }></div>
+
+                }
                     <BookShelfChanger book={ book } onChangeBookShelf={ onChangeBookShelf } />
                 </div>
                 <div className="book-title">{ book.title }</div>
